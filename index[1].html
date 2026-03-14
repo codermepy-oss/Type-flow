@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Typing Speed Test</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Typing Speed Test</h1>
+
+<p class="instructions">Press Start and type the sentence</p>
+
+<div id="sentence"></div>
+
+<textarea id="input" placeholder="Start typing here..." disabled></textarea>
+
+<div class="stats">
+
+<div class="stat">
+<h3>Time</h3>
+<p id="time">0</p>
+</div>
+
+<div class="stat">
+<h3>WPM</h3>
+<p id="wpm">0</p>
+</div>
+
+<div class="stat">
+<h3>Accuracy</h3>
+<p id="accuracy">100%</p>
+</div>
+
+</div>
+
+<div class="buttons">
+
+<button onclick="startGame()">Start</button>
+
+<button onclick="endGame()">End</button>
+
+<button onclick="restartGame()">Restart</button>
+
+</div>
+<div id="resultBox" class="resultBox">
+
+<h2>Test Completed!</h2>
+
+<p>Time Taken: <span id="finalTime"></span> seconds</p>
+
+<p>WPM: <span id="finalWpm"></span></p>
+
+<p>Accuracy: <span id="finalAccuracy"></span></p>
+
+<button onclick="restartGame()">Restart Test</button>
+
+</div>
+</div>
+<script src="script.js"></script>
+
+</body>
+</html>
