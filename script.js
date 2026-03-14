@@ -3,6 +3,7 @@ let inputField = document.getElementById("input")
 let timerDisplay = document.getElementById("timer")
 let wpmDisplay = document.getElementById("wpm")
 let accuracyDisplay = document.getElementById("accuracy")
+let message = document.getElementById("message")
 
 let startBtn = document.getElementById("startBtn")
 let endBtn = document.getElementById("endBtn")
@@ -11,7 +12,6 @@ let restartBtn = document.getElementById("restartBtn")
 let timer = 0
 let interval = null
 let sentence = ""
-let started = false
 
 const sentences = [
 "Typing practice improves speed and accuracy",
@@ -43,13 +43,10 @@ inputField.disabled=false
 inputField.value=""
 inputField.focus()
 
+message.textContent=""
+
 timer=0
 timerDisplay.innerText=timer
-
-wpmDisplay.innerText=0
-accuracyDisplay.innerText=0
-
-started=true
 
 interval=setInterval(()=>{
 timer++
@@ -65,6 +62,8 @@ inputField.disabled=true
 
 calculateResults()
 
+message.textContent="Test Completed!"
+
 }
 
 function restartTest(){
@@ -77,12 +76,12 @@ timerDisplay.innerText=0
 inputField.value=""
 inputField.disabled=true
 
+sentenceDisplay.innerHTML=""
+
 wpmDisplay.innerText=0
 accuracyDisplay.innerText=0
 
-sentenceDisplay.innerHTML=""
-
-started=false
+message.textContent=""
 
 }
 
