@@ -1,148 +1,54 @@
+let startBtn = document.getElementById("startBtn");
+let endBtn = document.getElementById("endBtn");
+let textDisplay = document.getElementById("textDisplay");
+let textInput = document.getElementById("textInput");
+let timerDisplay = document.getElementById("timer");
+let message = document.getElementById("message");
+
+let timer = 0;
+let interval = null;
+let isTyping = false;
+
 const sentences = [
-"Programming is the art of solving problems with code",
-"Practice typing daily to increase your speed",
-"JavaScript makes websites interactive and dynamic",
-"Consistency is the secret to becoming a great developer",
-"Small improvements every day lead to big success"
-]
+"Typing regularly improves speed and accuracy.",
+"Practice typing daily to become faster.",
+"Consistency is the key to mastering typing.",
+"Focus on accuracy before increasing speed.",
+"Typing games help develop muscle memory."
+];
 
-let sentence = ""
-let timer = 0
-let interval = null
-let startTime = null
-
-const sentenceElement = document.getElementById("sentence")
-const inputElement = document.getElementById("input")
-
-const timeElement = document.getElementById("time")
-const wpmElement = document.getElementById("wpm")
-const accuracyElement = document.getElementById("accuracy")
-
-function loadSentence(){
-
-sentence = sentences[Math.floor(Math.random()*sentences.length)]
-
-sentenceElement.innerHTML = ""
-
-sentence.split("").forEach(char => {
-
-const span = document.createElement("span")
-span.innerText = char
-
-sentenceElement.appendChild(span)
-
-})
-
+function getRandomSentence() {
+    return sentences[Math.floor(Math.random() * sentences.length)];
 }
 
-function startGame(){
+function startTest() {
+    textDisplay.textContent = getRandomSentence();
+    textInput.value = "";
+    textInput.disabled = false;
+    textInput.focus();
 
-if(startTime) return
+    timer = 0;
+    timerDisplay.textContent = timer;
 
-inputElement.disabled = false
-inputElement.focus()
+    message.textContent = "";
 
-startTime = new Date()
+    isTyping = true;
 
-startTimer()
-
+    interval = setInterval(function () {
+        timer++;
+        timerDisplay.textContent = timer;
+    }, 1000);
 }
 
-function startTimer(){
+function endTest() {
+    if (!isTyping) return;
 
-interval = setInterval(()=>{
+    clearInterval(interval);
+    isTyping = false;
+    textInput.disabled = true;
 
-timer++
-
-timeElement.textContent = timer
-
-},1000)
-
+    message.textContent = "Test Completed!";
 }
 
-inputElement.addEventListener("input",()=>{
-
-const typed = inputElement.value
-const characters = sentenceElement.querySelectorAll("span")
-
-let correct = 0
-
-characters.forEach((char,index)=>{
-
-const typedChar = typed[index]
-
-if(typedChar == null){
-
-char.classList.remove("correct")
-char.classList.remove("wrong")
-
-}
-
-else if(typedChar === char.innerText){
-
-char.classList.add("correct")
-char.classList.remove("wrong")
-
-correct++
-
-}
-
-else{
-
-char.classList.add("wrong")
-char.classList.remove("correct")
-
-}
-
-})
-
-let accuracy = Math.floor((correct/typed.length)*100)
-
-if(isNaN(accuracy)) accuracy = 100
-
-accuracyElement.textContent = accuracy + "%"
-
-const minutes = (new Date() - startTime)/1000/60
-
-const words = typed.length/5
-
-const wpm = Math.floor(words/minutes)
-
-if(isFinite(wpm)){
-wpmElement.textContent = wpm
-}
-
-})
-
-function endGame(){
-
-clearInterval(interval)
-
-interval = null
-
-inputElement.disabled = true
-
-}
-
-function restartGame(){
-
-clearInterval(interval)
-
-interval = null
-
-timer = 0
-timeElement.textContent = timer
-
-wpmElement.textContent = 0
-accuracyElement.textContent = "100%"
-
-inputElement.value = ""
-inputElement.disabled = true
-
-startTime = null
-
-loadSentence()
-
-}
-
-loadSentence()
+startBtn.addEventListener("click", startTest);
+endBtn.addEventListener("click", endTest);
