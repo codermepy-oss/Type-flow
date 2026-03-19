@@ -1,32 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Typing Trainer - Login</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - TypeMaster</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
-<body class="login-body">
+<body>
 
-<div class="login-container">
-  <h1>⌨️ Typing Trainer</h1>
+<div class="center-box">
+  <div class="card login-card">
+    <h2>👋 Welcome</h2>
+    <p>Enter your name to continue</p>
 
-  <div class="login-card">
-    <input type="text" id="username" placeholder="Enter your name">
-    <button onclick="login()">Start</button>
+    <input id="username" placeholder="Your name">
+    <button onclick="login()">Enter 🚀</button>
   </div>
 </div>
 
-<script>
-function login() {
-  const user = document.getElementById("username").value.trim()
-  if(user === "") return alert("Enter your name")
-
-  localStorage.setItem("user", user)
-  window.location.href = "dashboard.html"
-}
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
