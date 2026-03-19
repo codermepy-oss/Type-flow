@@ -20,6 +20,8 @@ Screenshots
 
 (Add images here later)
 
+Live Demo :  https://codermepy-oss.github.io/Type-flow/
+
  Live Demo
 
 (Add GitHub Pages link later)
