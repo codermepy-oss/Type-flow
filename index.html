@@ -22,9 +22,11 @@
     <option value="20">20 minutes</option>
     <option value="30">30 minutes</option>
   </select>
-
+  <br><br>
   <button onclick="startApp()">Start Practice</button>
 </div>
+<div id="streak-display">🔥 Streak: 0</div>
+<div id="typing-area" style="display: none;">
 <div id="sentence"></div>
 
 <textarea id="input" placeholder="Start typing here..." disabled></textarea>
@@ -34,7 +36,7 @@
 <button id="endBtn">End</button>
 <button id="restartBtn">Restart</button>
 </div>
-
+</div>
 <div class="results">
 <p>WPM: <span id="wpm">0</span></p>
 <p>Accuracy: <span id="accuracy">0</span>%</p>
