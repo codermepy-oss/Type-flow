@@ -14,7 +14,17 @@
 <h1>Typing Speed Test</h1>
 
 <p class="timer">Time: <span id="timer">0</span> sec</p>
+<div id="goal-screen">
+  <h2>Set Your Daily Typing Goal ⌨️</h2>
+  
+  <select id="goal-select">
+    <option value="10">10 minutes</option>
+    <option value="20">20 minutes</option>
+    <option value="30">30 minutes</option>
+  </select>
 
+  <button onclick="startApp()">Start Practice</button>
+</div>
 <div id="sentence"></div>
 
 <textarea id="input" placeholder="Start typing here..." disabled></textarea>
