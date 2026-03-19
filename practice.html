@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Practice</title>
 <link rel="stylesheet" href="style.css">
 </head>
@@ -11,43 +9,27 @@
 
 <div class="container">
 
-<header>
-    <h2>⌨️ Practice</h2>
-    <button onclick="goBack()">Back</button>
-</header>
+<h2>Practice</h2>
 
-<div class="practice-box">
-
-<!-- STATS TOP -->
 <div class="stats">
-    <div>⚡ WPM<br><b id="wpm">0</b></div>
-    <div>🎯 Accuracy<br><b id="accuracy">100</b>%</div>
-    <div>📝 Done<br><b id="done">0</b></div>
+    <span>⚡ WPM: <b id="wpm">0</b></span>
+    <span>🎯 Accuracy: <b id="accuracy">100</b>%</span>
+    <span>📝 Done: <b id="done">0</b></span>
 </div>
 
-<!-- SENTENCE -->
 <div id="sentence" class="sentence"></div>
 
-<!-- INPUT -->
-<input id="input" placeholder="Type and press Enter..."
-onkeydown="handleKey(event)">
+<input id="input" placeholder="Type and press Enter">
 
-<!-- PROGRESS -->
 <div class="progress">
-    <div id="progressBar"></div>
+    <div id="bar"></div>
 </div>
 
 </div>
 
-</div>
-
-<!-- POPUP -->
 <div id="popup" class="popup hidden">
-    <div class="popup-box">
-        <h2>🔥 Well Done</h2>
-        <p>You completed today’s goal</p>
-        <button onclick="closePopup()">Back</button>
-    </div>
+    <h2>🔥 Goal Completed!</h2>
+    <button onclick="goBack()">Back</button>
 </div>
 
 <script src="script.js"></script>
