@@ -2,23 +2,38 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - TypeMaster</title>
+<title>Typing Master - Login</title>
 <link rel="stylesheet" href="style.css">
 </head>
+<body class="light">
 
-<body>
+<div class="login-container">
+    <h1>🚀 Typing Master</h1>
+    <input type="text" id="username" placeholder="Enter your name">
+    
+    <select id="goal">
+        <option value="5">5 Questions / Day</option>
+        <option value="10">10 Questions / Day</option>
+        <option value="15">15 Questions / Day</option>
+    </select>
 
-<div class="center-box">
-  <div class="card login-card">
-    <h2>👋 Welcome</h2>
-    <p>Enter your name to continue</p>
-
-    <input id="username" placeholder="Your name">
-    <button onclick="login()">Enter 🚀</button>
-  </div>
+    <button onclick="login()">Start</button>
 </div>
 
-<script src="script.js"></script>
+<script>
+function login(){
+    const name = document.getElementById("username").value;
+    const goal = document.getElementById("goal").value;
+
+    if(name==="") return alert("Enter your name");
+
+    localStorage.setItem("user", name);
+    localStorage.setItem("goal", goal);
+    localStorage.setItem("completedToday", 0);
+
+    window.location.href = "dashboard.html";
+}
+</script>
+
 </body>
 </html>
