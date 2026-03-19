@@ -1,99 +1,134 @@
-const quotes = [
-"Push yourself, because no one else will.",
-"Success starts with consistency.",
-"Stay focused and never give up.",
-"Every day is a fresh start.",
-"Practice makes perfect."
-];
-
 const sentences = [
-"Typing fast requires practice and patience.",
-"Consistency is the key to improvement.",
-"The quick brown fox jumps over the lazy dog.",
-"Success comes from daily effort.",
-"Focus on accuracy before speed.",
-"Never stop learning new things.",
+"Practice makes perfect.",
+"Typing fast requires consistency.",
 "Discipline beats motivation.",
-"Small steps lead to big results.",
-"Stay calm and keep typing.",
-"Hard work always pays off."
+"Never give up on your goals.",
+"Success comes from daily effort.",
+"Stay focused and keep typing.",
+"Push yourself beyond limits.",
+"Consistency builds mastery.",
+"Hard work always pays off.",
+"Train your mind daily."
 ];
 
-let currentIndex = 0;
+let current = "";
+let startTime = 0;
+let completed = 0;
 
-if(document.getElementById("welcome")){
-    document.getElementById("welcome").innerText = "Hi, " + localStorage.getItem("user");
-    document.getElementById("goalDisplay").innerText = localStorage.getItem("goal");
-    document.getElementById("quote").innerText = quotes[Math.floor(Math.random()*quotes.length)];
-    document.getElementById("streak").innerText = localStorage.getItem("streak") || 0;
+function login() {
+    const name = document.getElementById("username").value;
+    const goal = document.getElementById("goal").value;
+
+    localStorage.setItem("name", name);
+    localStorage.setItem("goal", goal);
+
+    window.location.href = "dashboard.html";
 }
 
-function toggleMode(){
-    document.body.classList.toggle("dark");
-}
-
-function startPractice(){
+function startPractice() {
+    completed = 0;
+    localStorage.setItem("completedToday", 0);
     window.location.href = "practice.html";
 }
 
-if(document.getElementById("sentence")){
-    loadSentence();
+function loadDashboard() {
+    if (!document.getElementById("welcome")) return;
+
+    const name = localStorage.getItem("name");
+    const goal = localStorage.getItem("goal");
+
+    document.getElementById("welcome").innerText = "Hi " + name;
+    document.getElementById("goalDisplay").innerText = goal + " questions/day";
+
+    let streak = localStorage.getItem("streak") || 0;
+    document.getElementById("streak").innerText = streak + " days";
+
+    const quotes = [
+        "Keep going 💪",
+        "You are improving 🚀",
+        "Don't stop now 🔥",
+        "Stay consistent 👊"
+    ];
+
+    document.getElementById("quote").innerText =
+        quotes[Math.floor(Math.random() * quotes.length)];
+}
+
+function loadPractice() {
+    if (!document.getElementById("sentence")) return;
+
+    nextSentence();
 
     document.getElementById("input").addEventListener("input", checkTyping);
 }
 
-function loadSentence(){
-    document.getElementById("sentence").innerText = sentences[Math.floor(Math.random()*sentences.length)];
+function nextSentence() {
+    current = sentences[Math.floor(Math.random() * sentences.length)];
+    document.getElementById("sentence").innerHTML = current.split("").map(c => `<span>${c}</span>`).join("");
+    document.getElementById("input").value = "";
+    startTime = new Date().getTime();
 }
 
-function checkTyping(){
-    let input = document.getElementById("input").value;
-    let sentence = document.getElementById("sentence").innerText;
+function checkTyping() {
+    const input = document.getElementById("input").value;
+    const spans = document.querySelectorAll("#sentence span");
 
     let correct = 0;
 
-    for(let i=0;i<input.length;i++){
-        if(input[i] === sentence[i]) correct++;
-    }
+    spans.forEach((char, i) => {
+        if (input[i] == null) {
+            char.classList.remove("correct", "wrong");
+        } else if (input[i] === char.innerText) {
+            char.classList.add("correct");
+            char.classList.remove("wrong");
+            correct++;
+        } else {
+            char.classList.add("wrong");
+            char.classList.remove("correct");
+        }
+    });
 
-    let progress = (correct / sentence.length) * 100;
-    document.getElementById("progress").style.width = progress + "%";
+    let accuracy = Math.floor((correct / input.length) * 100) || 100;
+    document.getElementById("accuracy").innerText = accuracy;
 
-    if(input === sentence){
-        nextSentence();
+    let time = (new Date().getTime() - startTime) / 1000;
+    document.getElementById("time").innerText = Math.floor(time);
+
+    let wpm = Math.floor((input.length / 5) / (time / 60)) || 0;
+    document.getElementById("wpm").innerText = wpm;
+
+    if (input === current) {
+        completed++;
+        let goal = parseInt(localStorage.getItem("goal"));
+
+        if (completed >= goal) {
+            updateStreak();
+            document.getElementById("popup").classList.remove("hidden");
+        } else {
+            nextSentence();
+        }
     }
 }
 
-function nextSentence(){
-    currentIndex++;
-
-    let completed = parseInt(localStorage.getItem("completedToday")) + 1;
-    localStorage.setItem("completedToday", completed);
-
-    let goal = parseInt(localStorage.getItem("goal"));
-
-    if(completed >= goal){
-        document.getElementById("popup").classList.remove("hidden");
-        updateStreak();
-        return;
-    }
-
-    document.getElementById("input").value = "";
-    loadSentence();
-}
-
-function updateStreak(){
-    let lastDate = localStorage.getItem("lastCompletedDate");
+function updateStreak() {
+    let lastDate = localStorage.getItem("lastDate");
     let today = new Date().toDateString();
 
-    if(lastDate !== today){
+    if (lastDate !== today) {
         let streak = parseInt(localStorage.getItem("streak") || 0);
-        localStorage.setItem("streak", streak + 1);
-        localStorage.setItem("lastCompletedDate", today);
+        streak++;
+        localStorage.setItem("streak", streak);
+        localStorage.setItem("lastDate", today);
     }
 }
 
-function goBack(){
-    localStorage.setItem("completedToday", 0);
+function goDashboard() {
     window.location.href = "dashboard.html";
 }
+
+function toggleTheme() {
+    document.body.classList.toggle("dark");
+}
+
+loadDashboard();
+loadPractice();
