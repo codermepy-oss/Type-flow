@@ -1,77 +1,135 @@
-body {
-    margin: 0;
-    font-family: Arial;
-    transition: 0.3s;
+const sentences = [
+"The quick brown fox jumps over the lazy dog",
+"Typing fast requires consistent practice",
+"Discipline beats motivation every time",
+"Small progress leads to big results",
+"Focus on improvement not perfection",
+"Consistency is the key to mastery",
+"Push yourself a little more each day",
+"Speed comes with accuracy and practice"
+];
+
+let current = "";
+let goal = 5;
+let done = 0;
+
+let totalChars = 0;
+let correctChars = 0;
+
+let startTime;
+
+// LOAD PRACTICE
+if (document.getElementById("sentence")) {
+    goal = parseInt(localStorage.getItem("goal") || 5);
+    done = 0;
+    loadSentence();
 }
 
-.light { background: #f5f7fb; color: #111; }
-.dark { background: #121212; color: #fff; }
-
-.login-container, .dashboard, .practice-container {
-    max-width: 400px;
-    margin: auto;
-    text-align: center;
-    padding: 20px;
+// NEW SENTENCE
+function loadSentence() {
+    current = sentences[Math.floor(Math.random() * sentences.length)];
+    document.getElementById("sentence").innerText = current;
+    document.getElementById("input").value = "";
+    startTime = new Date();
 }
 
-input, select {
-    width: 90%;
-    padding: 10px;
-    margin: 10px;
-    border-radius: 8px;
+// ENTER KEY LOGIC
+function handleKey(e) {
+    if (e.key === "Enter") {
+        evaluate();
+    }
 }
 
-button {
-    padding: 10px 20px;
-    margin: 10px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
+// EVALUATE INPUT
+function evaluate() {
+    let input = document.getElementById("input").value;
+
+    let correct = 0;
+
+    for (let i = 0; i < input.length; i++) {
+        if (input[i] === current[i]) correct++;
+    }
+
+    totalChars += input.length;
+    correctChars += correct;
+
+    done++;
+    document.getElementById("done").innerText = done;
+
+    updateStats(input.length);
+
+    if (done >= goal) {
+        updateStreak();
+        document.getElementById("popup").classList.remove("hidden");
+    } else {
+        loadSentence();
+    }
 }
 
-.start-btn {
-    background: #4CAF50;
-    color: white;
+// UPDATE STATS
+function updateStats(charsTyped) {
+    let time = (new Date() - startTime) / 1000;
+
+    let wpm = Math.round((charsTyped / 5) / (time / 60));
+    document.getElementById("wpm").innerText = wpm || 0;
+
+    let accuracy = Math.round((correctChars / totalChars) * 100) || 100;
+    document.getElementById("accuracy").innerText = accuracy;
+
+    let progress = (done / goal) * 100;
+    document.getElementById("progressBar").style.width = progress + "%";
 }
 
-.cards {
-    display: grid;
-    gap: 10px;
+// NAV
+function goBack() {
+    window.location.href = "dashboard.html";
 }
 
-.card {
-    padding: 15px;
-    border-radius: 12px;
-    background: rgba(0,0,0,0.05);
+function closePopup() {
+    window.location.href = "dashboard.html";
 }
 
-.dark .card {
-    background: rgba(255,255,255,0.1);
-}
+// STREAK
+function updateStreak() {
+    let today = new Date().toDateString();
+    let last = localStorage.getItem("last");
 
-.sentence {
-    padding: 15px;
-    border-radius: 10px;
-    margin: 15px 0;
+    if (last !== today) {
+        let streak = parseInt(localStorage.getItem("streak") || 0);
+        localStorage.setItem("streak", streak + 1);
+        localStorage.setItem("last", today);
+    }
 }
-
-.correct { color: green; }
-.wrong { color: red; }
+.practice-box {
+    margin-top: 20px;
+    padding: 25px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+}
 
 .stats {
     display: flex;
     justify-content: space-around;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-.popup {
-    position: fixed;
-    top: 30%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #222;
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
+.stats div {
+    font-size: 14px;
+    opacity: 0.9;
 }
 
-.hidden { display: none; }
+.sentence {
+    font-size: 20px;
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+
+#input {
+    font-size: 16px;
+}
+
+.progress {
+    margin-top: 15px;
+}
