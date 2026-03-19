@@ -2,46 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Typing Speed App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typing Trainer - Login</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
-  <div class="container">
-    <h1>Typing Speed Trainer</h1>
+<body class="login-body">
 
-    <div class="stats">
-      <p>WPM: <span id="wpm">0</span></p>
-      <p>Accuracy: <span id="accuracy">100%</span></p>
-      <p>Streak: <span id="streak">0</span></p>
-      <p>Time Left: <span id="timer">0</span>s</p>
-    </div>
+<div class="login-container">
+  <h1>⌨️ Typing Trainer</h1>
 
-    <div class="sentence-box">
-      <p id="sentence">Click Start to begin...</p>
-    </div>
-
-    <textarea 
-      id="input" 
-      placeholder="Start typing here..." 
-      oninput="handleTyping()"
-      disabled
-    ></textarea>
-
-    <div class="buttons">
-      <button onclick="startApp(); enableTyping()">Start</button>
-      <button onclick="restartApp()">Restart</button>
-    </div>
+  <div class="login-card">
+    <input type="text" id="username" placeholder="Enter your name">
+    <button onclick="login()">Start</button>
   </div>
+</div>
 
-  <script src="script.js"></script>
+<script>
+function login() {
+  const user = document.getElementById("username").value.trim()
+  if(user === "") return alert("Enter your name")
 
-  <script>
-    function enableTyping() {
-      document.getElementById("input").disabled = false;
-      document.getElementById("input").focus();
-    }
-  </script>
+  localStorage.setItem("user", user)
+  window.location.href = "dashboard.html"
+}
+</script>
 
 </body>
 </html>
