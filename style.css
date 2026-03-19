@@ -1,144 +1,136 @@
-:root {
-  --bg: #0f172a;
-  --card: #1e293b;
-  --text: #e2e8f0;
-  --accent: #38bdf8;
+body {
+    margin: 0;
+    font-family: Arial;
+    overflow-x: hidden;
 }
 
 .light {
-  --bg: #f8fafc;
-  --card: #ffffff;
-  --text: #0f172a;
+    background: linear-gradient(120deg, #f6f9fc, #e9f2ff);
+    color: #222;
 }
 
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: var(--bg);
-  color: var(--text);
+.dark {
+    background: linear-gradient(120deg, #0f172a, #020617);
+    color: white;
 }
 
-/* CENTER LOGIN */
-.center-box {
-  display: flex;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
+/* 🫧 BUBBLES */
+.bubbles {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
 }
 
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
+.bubbles span {
+    position: absolute;
+    bottom: -100px;
+    width: 20px;
+    height: 20px;
+    background: rgba(0, 150, 255, 0.3);
+    border-radius: 50%;
+    animation: rise 10s infinite ease-in;
 }
 
-/* CARDS */
-.card {
-  background: var(--card);
-  padding: 20px;
-  border-radius: 18px;
-  margin-top: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-  animation: fadeUp 0.6s ease;
-}
-
-.login-card {
-  width: 300px;
-  text-align: center;
-}
-
-@keyframes fadeUp {
-  from {opacity: 0; transform: translateY(20px);}
-  to {opacity: 1; transform: translateY(0);}
-}
-
-/* FLEX */
-.flex {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* INPUT */
-input {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 10px;
-  border: none;
-}
-
-/* BUTTON */
-button {
-  margin-top: 10px;
-  padding: 12px;
-  width: 100%;
-  border: none;
-  background: var(--accent);
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-button:hover {
-  transform: scale(1.05);
-}
-
-/* TOP BAR */
-.top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.toggle {
-  font-size: 22px;
-  cursor: pointer;
-}
-
-/* PROGRESS */
-.progress {
-  height: 8px;
-  background: #334155;
-  border-radius: 5px;
-  margin-top: 10px;
-}
-.progress-bar {
-  height: 100%;
-  width: 0%;
-  background: var(--accent);
-}
-
-/* HIDDEN */
-.hidden {
-  display: none;
-}
-
-/* BUBBLES */
-.bubble {
-  position: fixed;
-  bottom: -100px;
-  width: 20px;
-  height: 20px;
-  background: rgba(56,189,248,0.3);
-  border-radius: 50%;
-  animation: rise 10s infinite;
-}
+.bubbles span:nth-child(1) { left: 10%; animation-duration: 8s; width: 15px; height: 15px;}
+.bubbles span:nth-child(2) { left: 30%; animation-duration: 12s;}
+.bubbles span:nth-child(3) { left: 50%; animation-duration: 9s; width: 25px; height: 25px;}
+.bubbles span:nth-child(4) { left: 70%; animation-duration: 11s;}
+.bubbles span:nth-child(5) { left: 90%; animation-duration: 7s; width: 18px; height: 18px;}
 
 @keyframes rise {
-  to {
-    transform: translateY(-120vh);
-  }
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.5;
+    }
+    100% {
+        transform: translateY(-120vh) scale(1.5);
+        opacity: 0;
+    }
 }
 
-/* ICON FLOAT */
-.icon {
-  font-size: 28px;
-  animation: float 3s infinite;
+/* UI */
+.login-container {
+    text-align: center;
+    margin-top: 150px;
 }
 
-@keyframes float {
-  50% {
-    transform: translateY(-10px);
-  }
+input, select {
+    padding: 10px;
+    margin: 10px;
+    width: 200px;
+    border-radius: 5px;
+    border: none;
+}
+
+button {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+}
+
+.dashboard {
+    text-align: center;
+}
+
+.card {
+    margin: 15px;
+    padding: 20px;
+    border-radius: 15px;
+    display: inline-block;
+    width: 220px;
+    backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.1);
+}
+
+.start-btn {
+    margin-top: 20px;
+}
+
+.practice-container {
+    width: 60%;
+    margin: auto;
+    text-align: center;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background: #ccc;
+    border-radius: 10px;
+}
+
+#progress {
+    height: 10px;
+    width: 0%;
+    background: limegreen;
+    border-radius: 10px;
+}
+
+.popup {
+    position: fixed;
+    top: 30%;
+    left: 35%;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.hidden {
+    display: none;
 }
