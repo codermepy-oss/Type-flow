@@ -1,138 +1,94 @@
-let sentences = {
-  easy: [
-    "The sun rises in the east.",
-    "I love to read books.",
-    "She is very kind.",
-    "We play every day.",
-    "This is a simple sentence.",
-    "He runs very fast.",
-    "They are good friends.",
-    "Coding is fun and easy.",
-    "Practice makes you better.",
-    "Keep learning new things."
-  ],
-  medium: [
-    "Typing fast requires consistent daily practice and focus.",
-    "JavaScript is widely used for building interactive websites.",
-    "Discipline is more important than motivation in the long run.",
-    "Frontend development involves HTML CSS and JavaScript.",
-    "A good developer writes clean and efficient code.",
-    "Small improvements every day lead to big success.",
-    "Time management is a key skill for students.",
-    "Debugging code helps you understand problems deeply.",
-    "Always test your code before deployment.",
-    "Learning never stops in the tech world."
-  ],
-  hard: [
-    "The quick brown fox jumps over the lazy dog multiple times to test typing efficiency.",
-    "Building scalable applications requires knowledge of system design and optimization techniques.",
-    "Consistency and discipline over time are more powerful than short bursts of motivation.",
-    "Advanced algorithms and data structures improve problem solving capabilities significantly.",
-    "User experience design plays a crucial role in modern application development.",
-    "Performance optimization is essential for large scale web applications.",
-    "Understanding asynchronous programming is key in JavaScript development.",
-    "Writing reusable and modular code improves maintainability.",
-    "Security vulnerabilities must be addressed during development lifecycle.",
-    "Clean architecture leads to better scalability and flexibility."
-  ]
-};
+const user = localStorage.getItem("user")
+if (!user) window.location.href = "index.html"
+document.getElementById("userName").innerText = user
 
-let usedSentences = [];
-let currentSentence = "";
-let startTime = null;
-let timerInterval = null;
-let totalTyped = 0;
-let correctTyped = 0;
-let streak = 0;
-let dailyGoal = 0;
-let sessionTime = 0;
-let difficulty = "easy";
+const sentenceDisplay = document.getElementById("sentence")
+const input = document.getElementById("input")
 
-function getSentence() {
-  let pool = sentences[difficulty];
-  let available = pool.filter(s => !usedSentences.includes(s));
-  if (available.length === 0) {
-    usedSentences = [];
-    available = pool;
+let currentSentence = ""
+let startTime
+let correctChars = 0
+
+let streak = localStorage.getItem("streak") || 0
+document.getElementById("streak").innerText = streak
+
+async function getSentence() {
+  try {
+    const res = await fetch("https://api.quotable.io/random")
+    const data = await res.json()
+    return data.content
+  } catch {
+    return "Practice typing every day to improve your speed."
   }
-  let sentence = available[Math.floor(Math.random() * available.length)];
-  usedSentences.push(sentence);
-  return sentence;
 }
 
-function startApp() {
-  dailyGoal = parseInt(prompt("Enter daily minutes goal:", "10")) || 10;
-  difficulty = prompt("Choose difficulty: easy / medium / hard", "easy");
-  sessionTime = dailyGoal * 60;
-  startSession();
+function renderSentence(sentence) {
+  sentenceDisplay.innerHTML = ""
+  sentence.split("").forEach(char => {
+    const span = document.createElement("span")
+    span.innerText = char
+    sentenceDisplay.appendChild(span)
+  })
 }
 
-function startSession() {
-  currentSentence = getSentence();
-  document.getElementById("sentence").innerText = currentSentence;
-  document.getElementById("input").value = "";
-  totalTyped = 0;
-  correctTyped = 0;
-  startTime = new Date().getTime();
+async function startApp() {
+  input.disabled = true
+  input.value = "Loading sentence..."
 
-  if (timerInterval) clearInterval(timerInterval);
+  currentSentence = await getSentence()
 
-  timerInterval = setInterval(() => {
-    let elapsed = Math.floor((new Date().getTime() - startTime) / 1000);
-    let remaining = sessionTime - elapsed;
-    document.getElementById("timer").innerText = remaining;
+  renderSentence(currentSentence)
+  input.value = ""
+  input.disabled = false
+  input.focus()
 
-    if (remaining <= 0) {
-      clearInterval(timerInterval);
-      alert("Session complete!");
+  startTime = new Date()
+  document.getElementById("progress-bar").style.width = "0%"
+}
+
+input.addEventListener("input", () => {
+  const text = input.value
+  const chars = sentenceDisplay.querySelectorAll("span")
+
+  correctChars = 0
+
+  chars.forEach((char, i) => {
+    if (text[i] == null) {
+      char.classList.remove("correct", "incorrect")
+      char.classList.add("current")
+    } 
+    else if (text[i] === char.innerText) {
+      char.classList.add("correct")
+      char.classList.remove("incorrect", "current")
+      correctChars++
+    } 
+    else {
+      char.classList.add("incorrect")
+      char.classList.remove("correct", "current")
     }
-  }, 1000);
-}
+  })
 
-function handleTyping() {
-  let input = document.getElementById("input").value;
-  let display = "";
-  correctTyped = 0;
+  const progress = (text.length / chars.length) * 100
+  document.getElementById("progress-bar").style.width = progress + "%"
 
-  for (let i = 0; i < currentSentence.length; i++) {
-    if (i < input.length) {
-      if (input[i] === currentSentence[i]) {
-        display += `<span style="color:green">${currentSentence[i]}</span>`;
-        correctTyped++;
-      } else {
-        display += `<span style="color:red">${currentSentence[i]}</span>`;
-      }
-    } else {
-      display += currentSentence[i];
-    }
+  const time = (new Date() - startTime) / 1000 / 60
+  const wpm = Math.round((text.length / 5) / time)
+  const accuracy = Math.round((correctChars / text.length) * 100) || 100
+
+  document.getElementById("wpm").innerText = wpm
+  document.getElementById("accuracy").innerText = accuracy + "%"
+
+  if (text === currentSentence) {
+    streak++
+    localStorage.setItem("streak", streak)
+    document.getElementById("streak").innerText = streak
+    startApp()
   }
+})
 
-  document.getElementById("sentence").innerHTML = display;
-  totalTyped = input.length;
-
-  if (input === currentSentence) {
-    streak++;
-    document.getElementById("streak").innerText = streak;
-    currentSentence = getSentence();
-    document.getElementById("sentence").innerText = currentSentence;
-    document.getElementById("input").value = "";
-  }
-
-  updateStats();
+function logout() {
+  localStorage.removeItem("user")
+  window.location.href = "index.html"
 }
 
-function updateStats() {
-  let timeElapsed = (new Date().getTime() - startTime) / 60000;
-  let wpm = Math.round((correctTyped / 5) / timeElapsed) || 0;
-  let accuracy = totalTyped === 0 ? 100 : Math.round((correctTyped / totalTyped) * 100);
-
-  document.getElementById("wpm").innerText = wpm;
-  document.getElementById("accuracy").innerText = accuracy + "%";
-}
-
-function restartApp() {
-  usedSentences = [];
-  streak = 0;
-  document.getElementById("streak").innerText = "0";
-  startApp();
-}
+window.onload = startApp
