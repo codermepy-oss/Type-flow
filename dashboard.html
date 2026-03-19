@@ -1,46 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Typing Trainer</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard - TypeMaster</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="app">
+<!-- BUBBLES -->
+<div class="bubble" style="left:10%"></div>
+<div class="bubble" style="left:30%"></div>
+<div class="bubble" style="left:50%"></div>
+<div class="bubble" style="left:70%"></div>
+<div class="bubble" style="left:90%"></div>
 
-  <header class="header">
-    <h1>⌨️ Typing Trainer</h1>
-    <div class="user-box">👤 <span id="userName"></span></div>
-  </header>
+<div class="container">
 
-  <main class="main">
+<!-- TOP BAR -->
+<div class="top-bar">
+  <h2 id="welcome"></h2>
+  <span class="toggle" onclick="toggleTheme()">🌓</span>
+</div>
 
-    <div class="card stats-card">
-      <div><p>WPM</p><h2 id="wpm">0</h2></div>
-      <div><p>Accuracy</p><h2 id="accuracy">100%</h2></div>
-      <div><p>🔥 Streak</p><h2 id="streak">0</h2></div>
-    </div>
+<!-- STREAK -->
+<div class="card">
+  <div class="flex">
+    <h3>🔥 Streak: <span id="streak">0</span></h3>
+    <span class="icon">🏆</span>
+  </div>
+  <p id="quote"></p>
+</div>
 
-    <div class="card progress-card">
-      <div class="progress-container">
-        <div id="progress-bar"></div>
-      </div>
-    </div>
+<!-- GOAL -->
+<div class="card">
+  <h3>🎯 Daily Goal</h3>
+  <input id="goal" type="number" placeholder="e.g. 10">
+  <button onclick="setGoal()">Save Goal</button>
+</div>
 
-    <div class="card typing-card">
-      <div id="sentence" class="sentence-box"></div>
-      <input type="text" id="input" placeholder="Start typing..." autocomplete="off">
-    </div>
+<!-- PRACTICE BUTTON -->
+<div class="card">
+  <div class="flex">
+    <h3>🚀 Practice</h3>
+    <span class="icon">⌨️</span>
+  </div>
+  <button onclick="startPractice()">Start Practice</button>
+</div>
 
-    <div class="card controls-card">
-      <button onclick="startApp()">Restart</button>
-      <button onclick="logout()">Logout</button>
-    </div>
+<!-- PRACTICE AREA -->
+<div id="practiceBox" class="card hidden">
+  <h3>⌨️ Practice Mode</h3>
 
-  </main>
+  <p id="sentence"></p>
+  <input id="input" oninput="checkTyping()">
+
+  <div class="progress">
+    <div id="progressBar" class="progress-bar"></div>
+  </div>
+
+  <p>⚡ WPM: <span id="wpm">0</span> | 🎯 Accuracy: <span id="accuracy">100</span>%</p>
+
+  <button onclick="backToDashboard()">Back</button>
+</div>
 
 </div>
 
