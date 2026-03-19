@@ -2,33 +2,32 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Practice</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="practice-container">
-<div class="bubbles">
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-</div>
-    <div class="progress-bar">
-        <div id="progress"></div>
+
+    <div class="stats">
+        <span>⏱ <span id="time">0</span>s</span>
+        <span>⚡ WPM: <span id="wpm">0</span></span>
+        <span>🎯 Accuracy: <span id="accuracy">100</span>%</span>
     </div>
 
-    <p id="sentence"></p>
+    <div id="sentence" class="sentence"></div>
 
-    <textarea id="input" placeholder="Start typing..."></textarea>
+    <input type="text" id="input" placeholder="Start typing..." autofocus>
+
+    <div id="progress"></div>
 
 </div>
 
 <div id="popup" class="popup hidden">
-    <h2>🎉 Well Done!</h2>
-    <p>You completed today's goal!</p>
-    <button onclick="goBack()">Back to Dashboard</button>
+    <h2>🎉 Goal Completed!</h2>
+    <p>Great job! Come back tomorrow 🔥</p>
+    <button onclick="goDashboard()">Back</button>
 </div>
 
 <script src="script.js"></script>
