@@ -1,4 +1,4 @@
-Typing Habit Builder - TYPE-FLOW
+Typing Habit Builder - TypeMaster⚡
 
 A web app that helps users improve typing speed while building a daily practice habit through streaks and progress tracking.
 
