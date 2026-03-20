@@ -257,6 +257,7 @@ body {
 
 .bubble-container { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
 .bubble { position: absolute; background: var(--accent); opacity: 0.05; border-radius: 50%; }
+
 .sentence-display {
     font-size: 1.8rem;
     margin-bottom: 30px;
