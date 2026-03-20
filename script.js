@@ -12,24 +12,31 @@ const sentences = [
     "During the storm, the old tree swayed dangerously in the wind.",
     "Technology has changed the way we communicate with others.",
     "He carefully painted the landscape with bright, vivid colors.",
-    "Travelling to new places helps you understand different culture.",
+    "Travelling to new places helps you understand different cultures.",
     "The children laughed and played in the sunlit garden.",
     "Writing neatly and clearly makes your work easier to read."
 ];
 
 let timer, startTime, isRunning = false;
 
-// Theme Toggle
-document.getElementById('theme-toggle').addEventListener('click', () => {
-    const isDark = document.body.classList.toggle('dark-mode');
-    document.body.classList.toggle('light-mode', !isDark);
-    document.getElementById('theme-toggle').innerText = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
-});
+// Theme Toggle logic
+const themeBtn = document.getElementById('theme-toggle');
+if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+        const isDark = document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode', !isDark);
+        themeBtn.innerText = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+    });
+}
 
 function navigateTo(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    document.getElementById('modal-overlay').classList.add('hidden');
+    const targetPage = document.getElementById(id);
+    if (targetPage) targetPage.classList.add('active');
+    
+    const modal = document.getElementById('modal-overlay');
+    if (modal) modal.classList.add('hidden');
+    
     if (id === 'practice') startTest();
 }
 
@@ -37,44 +44,73 @@ function startTest() {
     resetStats();
     const text = sentences[Math.floor(Math.random() * sentences.length)];
     const display = document.getElementById('text-display');
-    display.innerHTML = text.split('').map(c => `<span>${c}</span>`).join('');
+    if (display) {
+        display.innerHTML = text.split('').map(c => `<span>${c}</span>`).join('');
+    }
     const input = document.getElementById('typing-input');
-    input.value = "";
-    input.focus();
+    if (input) {
+        input.value = "";
+        input.focus();
+    }
 }
 
-document.getElementById('typing-input').addEventListener('input', (e) => {
-    if (!isRunning) startTimer();
-    
-    // Play keystroke sound
-    const snd = document.getElementById('key-sound');
-    snd.currentTime = 0; snd.volume = 0.2; snd.play();
+const typingInput = document.getElementById('typing-input');
+if (typingInput) {
+    typingInput.addEventListener('input', (e) => {
+        if (!isRunning) startTimer();
+        
+        const snd = document.getElementById('key-sound');
+        if (snd) {
+            snd.currentTime = 0;
+            snd.volume = 0.2;
+            snd.play().catch(() => {}); // Catch block prevents console errors if sound fails
+        }
 
-    const val = e.target.value;
-    const spans = document.getElementById('text-display').querySelectorAll('span');
-    let errs = 0;
+        const val = e.target.value;
+        const display = document.getElementById('text-display');
+        if (!display) return;
+        
+        const spans = display.querySelectorAll('span');
+        let errs = 0;
 
-    spans.forEach((span, i) => {
-        const char = val[i];
-        if (char == null) span.className = '';
-        else if (char === span.innerText) span.className = 'correct';
-        else { span.className = 'incorrect'; errs++; }
+        spans.forEach((span, i) => {
+            const char = val[i];
+            if (char == null) {
+                span.className = '';
+            } else if (char === span.innerText) {
+                span.className = 'correct';
+            } else {
+                span.className = 'incorrect';
+                errs++;
+            }
+        });
+
+        const accuracy = val.length > 0 ? Math.max(0, Math.floor(((val.length - errs) / val.length) * 100)) : 100;
+        const accDisplay = document.getElementById('accuracy');
+        if (accDisplay) accDisplay.innerText = accuracy;
+        
+        if (val === display.innerText) finish();
     });
 
-    const accuracy = val.length > 0 ? Math.max(0, Math.floor(((val.length - errs) / val.length) * 100)) : 100;
-    document.getElementById('accuracy').innerText = accuracy;
-    
-    if (val === document.getElementById('text-display').innerText) finish();
-});
+    typingInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && isRunning) finish();
+    });
+}
 
 function startTimer() {
     isRunning = true;
     startTime = Date.now();
     timer = setInterval(() => {
         const sec = Math.floor((Date.now() - startTime) / 1000);
-        document.getElementById('timer').innerText = sec;
-        const wpm = sec > 0 ? Math.floor((document.getElementById('typing-input').value.length / 5) / (sec / 60)) : 0;
-        document.getElementById('wpm').innerText = wpm;
+        const timerDisplay = document.getElementById('timer');
+        if (timerDisplay) timerDisplay.innerText = sec;
+        
+        const input = document.getElementById('typing-input');
+        const wpmDisplay = document.getElementById('wpm');
+        if (input && wpmDisplay) {
+            const wpm = sec > 0 ? Math.floor((input.value.length / 5) / (sec / 60)) : 0;
+            wpmDisplay.innerText = wpm;
+        }
     }, 1000);
 }
 
@@ -82,38 +118,47 @@ function finish() {
     clearInterval(timer);
     isRunning = false;
 
-    // Play success sound
     const successSnd = document.getElementById('success-sound');
-    if (successSnd) { successSnd.currentTime = 0; successSnd.play(); }
+    if (successSnd) {
+        successSnd.currentTime = 0;
+        successSnd.play().catch(() => {});
+    }
     
-    const wpm = document.getElementById('wpm').innerText;
-    const acc = document.getElementById('accuracy').innerText;
+    const wpm = document.getElementById('wpm')?.innerText || "0";
+    const acc = document.getElementById('accuracy')?.innerText || "100";
     
-    document.getElementById('final-results').innerHTML = `
-        <h3 class="result-wpm">${wpm} WPM</h3>
-        <p>Accuracy: ${acc}%</p>
-    `;
-    document.getElementById('modal-overlay').classList.remove('hidden');
+    const resultsArea = document.getElementById('final-results');
+    if (resultsArea) {
+        resultsArea.innerHTML = `<h3 class="result-wpm">${wpm} WPM</h3><p>Accuracy: ${acc}%</p>`;
+    }
+    
+    const modal = document.getElementById('modal-overlay');
+    if (modal) modal.classList.remove('hidden');
 }
 
 function resetStats() {
     clearInterval(timer);
     isRunning = false;
-    document.getElementById('timer').innerText = "0";
-    document.getElementById('wpm').innerText = "0";
-    document.getElementById('accuracy').innerText = "100";
+    if (document.getElementById('timer')) document.getElementById('timer').innerText = "0";
+    if (document.getElementById('wpm')) document.getElementById('wpm').innerText = "0";
+    if (document.getElementById('accuracy')) document.getElementById('accuracy').innerText = "100";
 }
 
-function resetTest() { navigateTo('practice'); }
+function resetTest() {
+    navigateTo('practice');
+}
 
-// BUBBLES ANIMATION
+// Generate background bubbles
 const container = document.getElementById('bubbles');
-for (let i = 0; i < 15; i++) {
-    const b = document.createElement('div');
-    b.className = 'bubble';
-    const s = Math.random() * 60 + 20 + 'px';
-    b.style.width = s; b.style.height = s;
-    b.style.left = Math.random() * 100 + 'vw';
-    b.style.top = Math.random() * 100 + 'vh';
-    container.appendChild(b);
+if (container) {
+    for (let i = 0; i < 15; i++) {
+        const b = document.createElement('div');
+        b.className = 'bubble';
+        const s = Math.random() * 60 + 20 + 'px';
+        b.style.width = s;
+        b.style.height = s;
+        b.style.left = Math.random() * 100 + 'vw';
+        b.style.top = Math.random() * 100 + 'vh';
+        container.appendChild(b);
+    }
 }
