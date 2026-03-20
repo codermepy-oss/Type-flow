@@ -2,7 +2,17 @@ const typingLibrary = [
     "Innovation distinguishes between a leader and a follower.",
     "The best way to predict the future is to create it.",
     "Speed is irrelevant if you are going in the wrong direction.",
-    "A journey of a thousand miles begins with a single keystroke."
+    "A journey of a thousand miles begins with a single keystroke.",
+    "Learning to type quickly requires focus and regular practice.",
+    "She opened the window to let the fresh morning air in.",
+    "The curious cat jumped onto the bookshelf silently.",
+    "Reading books every day can expand your knowledge greatly.",
+    "During the storm, the old tree swayed dangerously in the wind.",
+    "Technology has changed the way we communicate with others.",
+    "He carefully painted the landscape with bright, vivid colors.",
+    "Travelling to new places helps you understand different cultures.",
+    "The children laughed and played in the sunlit garden.",
+    "Writing neatly and clearly makes your work easier to read."
 ];
 
 let startTime, timerInterval, isTestRunning = false;
