@@ -96,26 +96,17 @@ function finish() {
     clearInterval(timer);
     isRunning = false;
 
-    // 1. PLAY SUCCESS SOUND
     var successSnd = document.getElementById('success-sound');
-    if (successSnd) {
-        successSnd.currentTime = 0;
-        successSnd.play().catch(function(e) { console.log("Sound blocked"); });
-    }
+    if (successSnd) { successSnd.currentTime = 0; successSnd.play().catch(function(){}); }
     
-    // 2. GET FINAL DATA
     var wpm = document.getElementById('wpm').innerText;
     var acc = document.getElementById('accuracy').innerText;
-    var timeTaken = document.getElementById('timer').innerText;
+    var time = document.getElementById('timer').innerText;
     
-    // 3. UPDATE MODAL (Ensuring same font classes)
-    var resultsArea = document.getElementById('final-results');
-    resultsArea.innerHTML = 
-        "<div class='modal-stats-container'>" +
-            "<h3 class='result-value'>" + wpm + " WPM</h3>" +
-            "<h3 class='result-value'>" + timeTaken + " Seconds</h3>" +
-            "<p class='result-accuracy'>Accuracy: " + acc + "%</p>" +
-        "</div>";
+    // We use "color-adaptive" here so the result text is visible in both modes
+    document.getElementById('final-results').innerHTML = 
+        "<h3 class='result-wpm'>" + wpm + " WPM</h3>" +
+        "<p class='color-adaptive'>Time: " + time + "s | Accuracy: " + acc + "%</p>";
     
     document.getElementById('modal-overlay').classList.remove('hidden');
 }
@@ -131,6 +122,11 @@ function resetStats() {
 function resetTest() { navigateTo('practice'); }
 
 // Theme Toggle
+// Check for saved theme on load
+if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light-mode');
+    document.getElementById('theme-toggle').innerHTML = "🌙 Dark Mode";
+}
 // Theme Toggle logic
 var themeBtn = document.getElementById('theme-toggle');
 
