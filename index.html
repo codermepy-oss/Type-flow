@@ -9,9 +9,6 @@
 <body class="dark-mode">
     <div class="bubble-container" id="bubbles"></div>
 
-    <audio id="key-sound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_731385a430.mp3"></audio>
-    <audio id="success-sound" src="https://cdn.pixabay.com/audio/2021/08/04/audio_0625c1539c.mp3"></audio>
-
     <nav class="glass-nav">
         <div class="nav-content">
             <div class="logo-container">
@@ -26,9 +23,7 @@
         <main id="dashboard" class="page active">
             <div class="hero-card glass-card">
                 <div class="hero-emoji-top">🚀 ⌨️ 🎯</div>
-                <span class="badge">Next-Gen Engine</span>
                 <h1 class="gradient-text">TypeFlow</h1>
-                <p class="hero-desc">High-performance typing. Master the flow. ✨</p>
                 <button class="btn-primary pulse" onclick="navigateTo('practice')">Start Practice ⚡</button>
             </div>
         </main>
@@ -36,50 +31,34 @@
         <main id="practice" class="page">
             <div class="practice-layout">
                 <div class="stats-grid">
-                    <div class="glass-card stat-tile hover-glow">
-                        <span class="tile-icon">⏱️</span>
+                    <div class="glass-card stat-tile">
                         <span class="label">TIME</span>
                         <span id="timer" class="value">0</span>
                     </div>
-                    <div class="glass-card stat-tile hover-glow">
-                        <span class="tile-icon">🚀</span>
+                    <div class="glass-card stat-tile">
                         <span class="label">WPM</span>
                         <span id="wpm" class="value">0</span>
                     </div>
-                    <div class="glass-card stat-tile hover-glow">
-                        <span class="tile-icon">🎯</span>
+                    <div class="glass-card stat-tile">
                         <span class="label">ACCURACY</span>
-                        <span id="accuracy" class="value">100</span><small>%</small>
+                        <div class="acc-wrapper"><span id="accuracy" class="value">100</span><span class="unit">%</span></div>
                     </div>
                 </div>
 
                 <div class="glass-card main-typing-box">
                     <div id="text-display" class="sentence-display"></div>
-                    <div class="input-wrapper">
-                        <input type="text" id="typing-input" placeholder="Start typing..." autocomplete="off">
-                    </div>
+                    <input type="text" id="typing-input" placeholder="Start typing..." autocomplete="off">
                 </div>
                 
                 <div class="exit-container">
-                    <button class="glass-card exit-tile hover-glow" onclick="navigateTo('dashboard')">
+                    <button class="exit-tile hover-glow" onclick="navigateTo('dashboard')">
                         Exit to Dashboard 🏠
                     </button>
                 </div>
             </div>
         </main>
     </div>
-
-    <div id="modal-overlay" class="modal hidden">
-        <div class="glass-card modal-box">
-            <h2>🏆 Result</h2>
-            <div id="final-results"></div>
-            <div class="modal-actions">
-                <button class="btn-primary" onclick="resetTest()">Try Again</button>
-                <button class="btn-primary btn-alt" onclick="navigateTo('dashboard')">Back</button>
-            </div>
-        </div>
-    </div>
-
+    
     <script src="script.js"></script>
 </body>
 </html>
