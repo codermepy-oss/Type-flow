@@ -3,6 +3,8 @@ var sentences = [
     "Precision is the key to mastering the art of typing fast.",
     "Success is the courage to continue when things get difficult.",
     "Mastering your flow is the secret to peak productivity.",
+    "The glowing interface responded instantly to every keystroke.",
+    "A journey of a thousand miles begins with a single step.",
     "Learning to type quickly requires focus and regular practice.",
     "She opened the window to let the fresh morning air in.",
     "The curious cat jumped onto the bookshelf silently.",
@@ -17,6 +19,7 @@ var sentences = [
 
 var timer, startTime, isRunning = false;
 
+// Page Navigation
 function navigateTo(id) {
     var pages = document.querySelectorAll('.page');
     for (var i = 0; i < pages.length; i++) {
@@ -27,6 +30,7 @@ function navigateTo(id) {
     if (id === 'practice') startTest();
 }
 
+// Start Session
 function startTest() {
     resetStats();
     var text = sentences[Math.floor(Math.random() * sentences.length)];
@@ -41,8 +45,14 @@ function startTest() {
     setTimeout(function() { input.focus(); }, 100);
 }
 
+// Typing Logic
 document.getElementById('typing-input').addEventListener('input', function(e) {
     if (!isRunning) startTimer();
+    
+    // Play keystroke sound
+    var snd = document.getElementById('key-sound');
+    if (snd) { snd.currentTime = 0; snd.volume = 0.2; snd.play().catch(function(){}); }
+
     var val = e.target.value;
     var spans = document.getElementById('text-display').querySelectorAll('span');
     var errs = 0;
@@ -56,7 +66,18 @@ document.getElementById('typing-input').addEventListener('input', function(e) {
 
     var accuracy = val.length > 0 ? Math.floor(((val.length - errs) / val.length) * 100) : 100;
     document.getElementById('accuracy').innerText = accuracy;
+    
+    // Auto-finish if perfectly correct
     if (val === document.getElementById('text-display').innerText) finish();
+});
+
+// NEW: FINISH ON ENTER KEY
+document.getElementById('typing-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        if (isRunning || document.getElementById('typing-input').value.length > 0) {
+            finish();
+        }
+    }
 });
 
 function startTimer() {
@@ -74,9 +95,18 @@ function startTimer() {
 function finish() {
     clearInterval(timer);
     isRunning = false;
-    document.getElementById('success-sound').play().catch(function(){});
+
+    // Play success sound
+    var successSnd = document.getElementById('success-sound');
+    if (successSnd) { 
+        successSnd.currentTime = 0; 
+        successSnd.play().catch(function(){}); 
+    }
+    
     var wpm = document.getElementById('wpm').innerText;
     var acc = document.getElementById('accuracy').innerText;
+    
+    // Show results
     document.getElementById('final-results').innerHTML = "<h3>" + wpm + " WPM</h3><p>Accuracy: " + acc + "%</p>";
     document.getElementById('modal-overlay').classList.remove('hidden');
 }
@@ -91,12 +121,12 @@ function resetStats() {
 
 function resetTest() { navigateTo('practice'); }
 
-// Simple Theme Toggle
+// Theme Toggle
 document.getElementById('theme-toggle').onclick = function() {
     document.body.classList.toggle('light-mode');
 };
 
-// Simple Bubbles
+// Background Bubbles
 var container = document.getElementById('bubbles');
 for (var i = 0; i < 15; i++) {
     var b = document.createElement('div');
