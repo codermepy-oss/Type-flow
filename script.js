@@ -17,27 +17,55 @@ var sentences = [
     "Writing neatly and clearly makes your work easier to read."
 ];
 var timer, startTime, isRunning = false;
+
+// --- 2. THEME TOGGLE (FIXED) ---
+function initTheme() {
+    var themeBtn = document.getElementById('theme-toggle');
+    if (!themeBtn) return;
+
+    // Load saved preference
+    if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light-mode');
+        themeBtn.innerHTML = "🌙 Dark Mode";
+    }
+
+    themeBtn.onclick = function() {
+        var isLight = document.body.classList.toggle('light-mode');
+        if (isLight) {
+            this.innerHTML = "🌙 Dark Mode";
+            localStorage.setItem('theme', 'light');
+        } else {
+            this.innerHTML = "☀️ Light Mode";
+            localStorage.setItem('theme', 'dark');
+        }
+    };
+}
+
+// --- 3. NAVIGATION ---
 function navigateTo(id) {
     var pages = document.querySelectorAll('.page');
     for (var i = 0; i < pages.length; i++) {
         pages[i].classList.remove('active');
     }
-    document.getElementById(id).classList.add('active');
+    
+    var target = document.getElementById(id);
+    if (target) target.classList.add('active');
+    
     document.getElementById('modal-overlay').classList.add('hidden');
     
     if (id === 'practice') {
-        startTest(); // This generates the sentence
+        startTest();
     } else {
         resetStats();
     }
 }
 
+// --- 4. CORE TYPING LOGIC ---
 function startTest() {
     resetStats();
     var text = sentences[Math.floor(Math.random() * sentences.length)];
     var display = document.getElementById('text-display');
     
-    // Create spans for each letter
     var htmlContent = "";
     for (var i = 0; i < text.length; i++) {
         htmlContent += "<span>" + text[i] + "</span>";
@@ -53,6 +81,10 @@ function startTest() {
 document.getElementById('typing-input').addEventListener('input', function(e) {
     if (!isRunning) startTimer();
     
+    // Play keystroke sound
+    var snd = document.getElementById('key-sound');
+    if (snd) { snd.currentTime = 0; snd.volume = 0.2; snd.play().catch(function(){}); }
+
     var val = e.target.value;
     var spans = document.getElementById('text-display').querySelectorAll('span');
     var errs = 0;
@@ -70,13 +102,14 @@ document.getElementById('typing-input').addEventListener('input', function(e) {
     if (val === document.getElementById('text-display').innerText) finish();
 });
 
-// POPUP ON ENTER
+// FINISH ON ENTER
 document.getElementById('typing-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && isRunning) {
+    if (e.key === 'Enter' && (isRunning || this.value.length > 0)) {
         finish();
     }
 });
 
+// --- 5. TIMER & RESULTS ---
 function startTimer() {
     isRunning = true;
     startTime = Date.now();
@@ -94,7 +127,7 @@ function finish() {
     isRunning = false;
     document.getElementById('typing-input').disabled = true;
 
-    // Sound
+    // Success Sound
     var successSnd = document.getElementById('success-sound');
     if (successSnd) { successSnd.currentTime = 0; successSnd.play().catch(function(){}); }
     
@@ -102,7 +135,7 @@ function finish() {
     var acc = document.getElementById('accuracy').innerText;
     var time = document.getElementById('timer').innerText;
     
-    // Result Display
+    // Injection into the Modal Stats Container
     document.getElementById('final-results').innerHTML = 
         "<h3 class='result-value'>" + wpm + " WPM</h3>" +
         "<h3 class='result-value' style='font-size:2rem;'>" + time + " Seconds</h3>" +
@@ -120,3 +153,21 @@ function resetStats() {
 }
 
 function resetTest() { navigateTo('practice'); }
+
+// --- 6. INITIALIZATION ---
+window.onload = function() {
+    initTheme();
+    
+    // Simple Bubbles
+    var container = document.getElementById('bubbles');
+    if (container) {
+        for (var i = 0; i < 15; i++) {
+            var b = document.createElement('div');
+            b.className = 'bubble';
+            b.style.width = "40px"; b.style.height = "40px";
+            b.style.left = Math.random() * 100 + "vw";
+            b.style.top = Math.random() * 100 + "vh";
+            container.appendChild(b);
+        }
+    }
+};
