@@ -3,6 +3,7 @@ const typingLibrary = [
     "The best way to predict the future is to create it.",
     "Speed is irrelevant if you are going in the wrong direction.",
     "A journey of a thousand miles begins with a single keystroke.",
+    "Design is not just what it looks like, design is how it works.",
     "Learning to type quickly requires focus and regular practice.",
     "She opened the window to let the fresh morning air in.",
     "The curious cat jumped onto the bookshelf silently.",
@@ -17,41 +18,46 @@ const typingLibrary = [
 
 let startTime, timerInterval, isTestRunning = false;
 
-// THEME TOGGLE
-document.getElementById('theme-toggle').addEventListener('click', () => {
+// --- THEME TOGGLE ENGINE ---
+const themeBtn = document.getElementById('theme-toggle');
+themeBtn.addEventListener('click', () => {
     const body = document.body;
     if (body.classList.contains('dark-mode')) {
         body.classList.replace('dark-mode', 'light-mode');
-        document.getElementById('theme-toggle').innerText = "🌙 Dark Mode";
+        themeBtn.innerHTML = "🌙 Dark Mode";
     } else {
         body.classList.replace('light-mode', 'dark-mode');
-        document.getElementById('theme-toggle').innerText = "☀️ Light Mode";
+        themeBtn.innerHTML = "☀️ Light Mode";
     }
 });
 
-// NAVIGATION
+// --- NAVIGATION ---
 function navigateTo(pageId) {
     document.getElementById('modal-overlay').classList.add('hidden');
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(pageId).classList.add('active');
     if (pageId === 'practice') startSession();
+    else resetStats();
 }
 
 function startSession() {
     resetStats();
     const sentence = typingLibrary[Math.floor(Math.random() * typingLibrary.length)];
+    // Wrap each character in a span for the green/red highlight effect
     document.getElementById('text-display').innerHTML = sentence.split('').map(c => `<span>${c}</span>`).join('');
     const input = document.getElementById('typing-input');
     input.value = "";
-    input.focus();
+    setTimeout(() => input.focus(), 100); 
 }
 
-// TYPING ENGINE
+// --- TYPING ENGINE ---
 document.getElementById('typing-input').addEventListener('input', (e) => {
     if (!isTestRunning) startTimer();
     
+    // Play Mechanical Key Sound
     const keySound = document.getElementById('key-sound');
     keySound.currentTime = 0;
+    keySound.volume = 0.3;
     keySound.play();
 
     const inputVal = e.target.value;
@@ -59,17 +65,30 @@ document.getElementById('typing-input').addEventListener('input', (e) => {
     let errors = 0;
 
     spans.forEach((span, i) => {
-        if (inputVal[i] == null) span.className = '';
-        else if (inputVal[i] === span.innerText) span.className = 'correct';
-        else { span.className = 'incorrect'; errors++; }
+        const char = inputVal[i];
+        if (char == null) {
+            span.className = '';
+        } else if (char === span.innerText) {
+            span.className = 'correct'; // Turns Green
+        } else {
+            span.className = 'incorrect'; // Turns Red
+            errors++;
+        }
     });
 
+    // Real-time Stats
     const accuracy = inputVal.length > 0 ? Math.max(0, Math.floor(((inputVal.length - errors) / inputVal.length) * 100)) : 100;
     document.getElementById('accuracy').innerText = accuracy;
+
+    // Auto-finish if perfect
+    if (inputVal === document.getElementById('text-display').innerText) {
+        finishTest();
+    }
 });
 
+// Finish on Enter
 document.getElementById('typing-input').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') finishTest();
+    if (e.key === 'Enter' && isTestRunning) finishTest();
 });
 
 function startTimer() {
@@ -93,9 +112,11 @@ function finishTest() {
     const time = document.getElementById('timer').innerText;
 
     document.getElementById('final-results').innerHTML = `
-        <p>Speed: <strong>${wpm} WPM</strong></p>
-        <p>Accuracy: <strong>${acc}%</strong></p>
-        <p>Time: <strong>${time}s</strong></p>
+        <div style="margin-bottom:15px; font-size:1.4rem;">
+            Speed: <strong style="color:var(--accent)">${wpm} WPM</strong><br>
+            Accuracy: <strong>${acc}%</strong><br>
+            Time: <strong>${time}s</strong>
+        </div>
     `;
     document.getElementById('modal-overlay').classList.remove('hidden');
 }
@@ -113,7 +134,7 @@ function resetTest() {
     startSession();
 }
 
-// RANDOM BUBBLE GENERATOR
+// --- BUBBLE GENERATOR (RANDOM MOTION) ---
 function initBubbles() {
     const container = document.getElementById('bubbles');
     for (let i = 0; i < 20; i++) {
