@@ -3,7 +3,17 @@ const sentences = [
     "Precision is the key to mastering the art of typing fast.",
     "The glowing interface responded instantly to every single stroke.",
     "Modern web interfaces prioritize beauty as much as functionality.",
-    "Success is not final, failure is not fatal: it is the courage to continue."
+    "Success is not final, failure is not fatal: it is the courage to continue.",
+    "Learning to type quickly requires focus and regular practice.",
+    "She opened the window to let the fresh morning air in.",
+    "The curious cat jumped onto the bookshelf silently.",
+    "Reading books every day can expand your knowledge greatly.",
+    "During the storm, the old tree swayed dangerously in the wind.",
+    "Technology has changed the way we communicate with others.",
+    "He carefully painted the landscape with bright, vivid colors.",
+    "Travelling to new places helps you understand different cultures.",
+    "The children laughed and played in the sunlit garden.",
+    "Writing neatly and clearly makes your work easier to read."
 ];
 
 let timer, startTime, isRunning = false;
