@@ -1,44 +1,46 @@
+// --- 1. THEME TOGGLE (Rock Solid Version) ---
+function toggleTheme() {
+    var body = document.body;
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+
+    var isLight = body.classList.toggle('light-mode');
+    
+    if (isLight) {
+        btn.innerHTML = "🌙 Dark Mode";
+        localStorage.setItem('theme', 'light');
+    } else {
+        btn.innerHTML = "☀️ Light Mode";
+        localStorage.setItem('theme', 'dark');
+    }
+}
+
+// Initialize Theme immediately
+if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light-mode');
+}
+
+// Wait for DOM to load to attach click event
+document.addEventListener('DOMContentLoaded', function() {
+    var themeBtn = document.getElementById('theme-toggle');
+    if (themeBtn) {
+        // Set initial text based on current mode
+        themeBtn.innerHTML = document.body.classList.contains('light-mode') ? "🌙 Dark Mode" : "☀️ Light Mode";
+        themeBtn.addEventListener('click', toggleTheme);
+    }
+});
+
+// --- 2. DATA & STATE ---
 var sentences = [
     "The best way to predict the future is to create it.",
     "Precision is the key to mastering the art of typing fast.",
     "Success is the courage to continue when things get difficult.",
     "Mastering your flow is the secret to peak productivity.",
     "The glowing interface responded instantly to every keystroke.",
-    "A journey of a thousand miles begins with a single step.",
-    "Learning to type quickly requires focus and regular practice.",
-    "She opened the window to let the fresh morning air in.",
-    "The curious cat jumped onto the bookshelf silently.",
-    "Reading books every day can expand your knowledge greatly.",
-    "During the storm, the old tree swayed dangerously in the wind.",
-    "Technology has changed the way we communicate with others.",
-    "He carefully painted the landscape with bright, vivid colors.",
-    "Travelling to new places helps you understand different cultures.",
-    "The children laughed and played in the sunlit garden.",
-    "Writing neatly and clearly makes your work easier to read."
+    "A journey of a thousand miles begins with a single step."
 ];
+
 var timer, startTime, isRunning = false;
-// --- 2. THEME TOGGLE (FIXED) ---
-function initTheme() {
-    var themeBtn = document.getElementById('theme-toggle');
-    if (!themeBtn) return;
-
-    // Load saved preference
-    if (localStorage.getItem('theme') === 'light') {
-        document.body.classList.add('light-mode');
-        themeBtn.innerHTML = "🌙 Dark Mode";
-    }
-
-    themeBtn.onclick = function() {
-        var isLight = document.body.classList.toggle('light-mode');
-        if (isLight) {
-            this.innerHTML = "🌙 Dark Mode";
-            localStorage.setItem('theme', 'light');
-        } else {
-            this.innerHTML = "☀️ Light Mode";
-            localStorage.setItem('theme', 'dark');
-        }
-    };
-}
 
 // --- 3. NAVIGATION ---
 function navigateTo(id) {
@@ -80,7 +82,6 @@ function startTest() {
 document.getElementById('typing-input').addEventListener('input', function(e) {
     if (!isRunning) startTimer();
     
-    // Play keystroke sound
     var snd = document.getElementById('key-sound');
     if (snd) { snd.currentTime = 0; snd.volume = 0.2; snd.play().catch(function(){}); }
 
@@ -101,7 +102,6 @@ document.getElementById('typing-input').addEventListener('input', function(e) {
     if (val === document.getElementById('text-display').innerText) finish();
 });
 
-// FINISH ON ENTER
 document.getElementById('typing-input').addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && (isRunning || this.value.length > 0)) {
         finish();
@@ -126,7 +126,6 @@ function finish() {
     isRunning = false;
     document.getElementById('typing-input').disabled = true;
 
-    // Success Sound
     var successSnd = document.getElementById('success-sound');
     if (successSnd) { successSnd.currentTime = 0; successSnd.play().catch(function(){}); }
     
@@ -134,7 +133,6 @@ function finish() {
     var acc = document.getElementById('accuracy').innerText;
     var time = document.getElementById('timer').innerText;
     
-    // Injection into the Modal Stats Container
     document.getElementById('final-results').innerHTML = 
         "<h3 class='result-value'>" + wpm + " WPM</h3>" +
         "<h3 class='result-value' style='font-size:2rem;'>" + time + " Seconds</h3>" +
@@ -152,21 +150,3 @@ function resetStats() {
 }
 
 function resetTest() { navigateTo('practice'); }
-
-// --- 6. INITIALIZATION ---
-window.onload = function() {
-    initTheme();
-    
-    // Simple Bubbles
-    var container = document.getElementById('bubbles');
-    if (container) {
-        for (var i = 0; i < 15; i++) {
-            var b = document.createElement('div');
-            b.className = 'bubble';
-            b.style.width = "40px"; b.style.height = "40px";
-            b.style.left = Math.random() * 100 + "vw";
-            b.style.top = Math.random() * 100 + "vh";
-            container.appendChild(b);
-        }
-    }
-};
