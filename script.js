@@ -131,10 +131,22 @@ function resetStats() {
 function resetTest() { navigateTo('practice'); }
 
 // Theme Toggle
-document.getElementById('theme-toggle').onclick = function() {
-    document.body.classList.toggle('light-mode');
-};
+// Theme Toggle logic
+var themeBtn = document.getElementById('theme-toggle');
 
+if (themeBtn) {
+    themeBtn.onclick = function() {
+        // Toggle the class on the body
+        var isLight = document.body.classList.toggle('light-mode');
+        
+        // Update the button text and emoji
+        if (isLight) {
+            themeBtn.innerHTML = "🌙 Dark Mode";
+        } else {
+            themeBtn.innerHTML = "☀️ Light Mode";
+        }
+    };
+}
 // Background Bubbles
 var container = document.getElementById('bubbles');
 for (var i = 0; i < 15; i++) {
