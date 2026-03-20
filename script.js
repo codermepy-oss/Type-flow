@@ -3,42 +3,28 @@ const typingLibrary = [
     "A journey of a thousand miles begins with a single step and a focused mind.",
     "Mastering the keyboard requires both speed and precision in every single stroke.",
     "The golden sun dipped below the horizon, painting the sky in shades of yellow.",
-    "Responsive web design ensures that your website looks great on all devices."
+    "Artificial intelligence is helping creators build the future of the web."
 ];
 
 let startTime, timerInterval, isTestRunning = false;
-const body = document.body;
+const html = document.documentElement;
 const themeBtn = document.getElementById('theme-toggle');
 
-// Theme Toggle Logic
+// Theme Toggle using Data Attributes
 themeBtn.addEventListener('click', () => {
-    if (body.classList.contains('dark-mode')) {
-        body.classList.replace('dark-mode', 'light-mode');
-        themeBtn.innerText = "🌙 Dark Mode";
-    } else {
-        body.classList.replace('light-mode', 'dark-mode');
-        themeBtn.innerText = "☀️ Light Mode";
-    }
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    themeBtn.innerText = newTheme === 'dark' ? "☀️ Light Mode" : "🌙 Dark Mode";
 });
 
-function createBubbles() {
-    const container = document.getElementById('bubbles');
-    for (let i = 0; i < 15; i++) {
-        const b = document.createElement('div');
-        b.className = 'bubble';
-        const size = Math.random() * 60 + 20 + 'px';
-        b.style.width = size; b.style.height = size;
-        b.style.left = Math.random() * 100 + 'vw';
-        b.style.animationDuration = (Math.random() * 8 + 7) + 's';
-        b.style.animationDelay = Math.random() * 5 + 's';
-        container.appendChild(b);
-    }
-}
-
+// Navigation & Initialization
 function navigateTo(pageId) {
+    document.getElementById('modal-overlay').classList.add('hidden');
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(pageId).classList.add('active');
     if (pageId === 'practice') startSession();
+    else resetStats();
 }
 
 function startSession() {
@@ -50,17 +36,17 @@ function startSession() {
     input.focus();
 }
 
+// Typing Logic & Sound
 document.getElementById('typing-input').addEventListener('input', (e) => {
     if (!isTestRunning) startTimer();
     
-    // Play Sound
-    const keySound = document.getElementById('key-sound');
-    keySound.currentTime = 0;
-    keySound.volume = 0.2;
-    keySound.play();
+    document.getElementById('key-sound').currentTime = 0;
+    document.getElementById('key-sound').volume = 0.2;
+    document.getElementById('key-sound').play();
 
     const inputVal = e.target.value;
     const spans = document.getElementById('text-display').querySelectorAll('span');
+    const displayChars = document.getElementById('text-display').innerText;
     let errors = 0;
 
     spans.forEach((span, i) => {
@@ -72,7 +58,12 @@ document.getElementById('typing-input').addEventListener('input', (e) => {
     const accuracy = inputVal.length > 0 ? Math.max(0, Math.floor(((inputVal.length - errors) / inputVal.length) * 100)) : 100;
     document.getElementById('accuracy').innerText = accuracy;
 
-    if (inputVal === document.getElementById('text-display').innerText) finishTest();
+    if (inputVal === displayChars) finishTest();
+});
+
+// Finish on Enter key
+document.getElementById('typing-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && isTestRunning) finishTest();
 });
 
 function startTimer() {
@@ -93,12 +84,12 @@ function finishTest() {
 
     const wpm = document.getElementById('wpm').innerText;
     const acc = document.getElementById('accuracy').innerText;
-    
-    let feedback = wpm > 60 ? "Lightning Fast! ⚡" : "Great job! Keep it up! 🚀";
+    const time = document.getElementById('timer').innerText;
 
     document.getElementById('final-results').innerHTML = `
-        <p style="color:var(--accent); font-weight:bold; margin-bottom:10px;">${feedback}</p>
-        <p>Speed: ${wpm} WPM | Accuracy: ${acc}%</p>
+        <p>Speed: <strong>${wpm} WPM</strong></p>
+        <p>Accuracy: <strong>${acc}%</strong></p>
+        <p>Time: <strong>${time} Seconds</strong></p>
     `;
     document.getElementById('modal-overlay').classList.remove('hidden');
 }
@@ -113,7 +104,20 @@ function resetStats() {
 
 function resetTest() {
     document.getElementById('modal-overlay').classList.add('hidden');
-    navigateTo('dashboard');
+    startSession();
 }
 
-createBubbles();
+// Create Background Bubbles
+(function createBubbles() {
+    const container = document.getElementById('bubbles');
+    for (let i = 0; i < 15; i++) {
+        const b = document.createElement('div');
+        b.className = 'bubble';
+        const size = Math.random() * 60 + 20 + 'px';
+        b.style.width = size; b.style.height = size;
+        b.style.left = Math.random() * 100 + 'vw';
+        b.style.animationDuration = (Math.random() * 8 + 7) + 's';
+        b.style.animationDelay = Math.random() * 5 + 's';
+        container.appendChild(b);
+    }
+})();
