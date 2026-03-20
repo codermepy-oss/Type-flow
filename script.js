@@ -1,30 +1,30 @@
 const typingLibrary = [
-    "The futuristic interface glowed with a soft green light against the dark room.",
-    "A journey of a thousand miles begins with a single step and a focused mind.",
-    "Mastering the keyboard requires both speed and precision in every single stroke.",
-    "The golden sun dipped below the horizon, painting the sky in shades of yellow.",
-    "Artificial intelligence is helping creators build the future of the web."
+    "Innovation distinguishes between a leader and a follower.",
+    "The best way to predict the future is to create it.",
+    "Speed is irrelevant if you are going in the wrong direction.",
+    "A journey of a thousand miles begins with a single keystroke."
 ];
 
 let startTime, timerInterval, isTestRunning = false;
-const html = document.documentElement;
-const themeBtn = document.getElementById('theme-toggle');
 
-// Theme Toggle using Data Attributes
-themeBtn.addEventListener('click', () => {
-    const currentTheme = html.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    html.setAttribute('data-theme', newTheme);
-    themeBtn.innerText = newTheme === 'dark' ? "☀️ Light Mode" : "🌙 Dark Mode";
+// THEME TOGGLE
+document.getElementById('theme-toggle').addEventListener('click', () => {
+    const body = document.body;
+    if (body.classList.contains('dark-mode')) {
+        body.classList.replace('dark-mode', 'light-mode');
+        document.getElementById('theme-toggle').innerText = "🌙 Dark Mode";
+    } else {
+        body.classList.replace('light-mode', 'dark-mode');
+        document.getElementById('theme-toggle').innerText = "☀️ Light Mode";
+    }
 });
 
-// Navigation & Initialization
+// NAVIGATION
 function navigateTo(pageId) {
     document.getElementById('modal-overlay').classList.add('hidden');
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(pageId).classList.add('active');
     if (pageId === 'practice') startSession();
-    else resetStats();
 }
 
 function startSession() {
@@ -36,17 +36,16 @@ function startSession() {
     input.focus();
 }
 
-// Typing Logic & Sound
+// TYPING ENGINE
 document.getElementById('typing-input').addEventListener('input', (e) => {
     if (!isTestRunning) startTimer();
     
-    document.getElementById('key-sound').currentTime = 0;
-    document.getElementById('key-sound').volume = 0.2;
-    document.getElementById('key-sound').play();
+    const keySound = document.getElementById('key-sound');
+    keySound.currentTime = 0;
+    keySound.play();
 
     const inputVal = e.target.value;
     const spans = document.getElementById('text-display').querySelectorAll('span');
-    const displayChars = document.getElementById('text-display').innerText;
     let errors = 0;
 
     spans.forEach((span, i) => {
@@ -57,13 +56,10 @@ document.getElementById('typing-input').addEventListener('input', (e) => {
 
     const accuracy = inputVal.length > 0 ? Math.max(0, Math.floor(((inputVal.length - errors) / inputVal.length) * 100)) : 100;
     document.getElementById('accuracy').innerText = accuracy;
-
-    if (inputVal === displayChars) finishTest();
 });
 
-// Finish on Enter key
 document.getElementById('typing-input').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && isTestRunning) finishTest();
+    if (e.key === 'Enter') finishTest();
 });
 
 function startTimer() {
@@ -89,7 +85,7 @@ function finishTest() {
     document.getElementById('final-results').innerHTML = `
         <p>Speed: <strong>${wpm} WPM</strong></p>
         <p>Accuracy: <strong>${acc}%</strong></p>
-        <p>Time: <strong>${time} Seconds</strong></p>
+        <p>Time: <strong>${time}s</strong></p>
     `;
     document.getElementById('modal-overlay').classList.remove('hidden');
 }
@@ -107,17 +103,21 @@ function resetTest() {
     startSession();
 }
 
-// Create Background Bubbles
-(function createBubbles() {
+// RANDOM BUBBLE GENERATOR
+function initBubbles() {
     const container = document.getElementById('bubbles');
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 20; i++) {
         const b = document.createElement('div');
         b.className = 'bubble';
         const size = Math.random() * 60 + 20 + 'px';
-        b.style.width = size; b.style.height = size;
+        b.style.width = size;
+        b.style.height = size;
         b.style.left = Math.random() * 100 + 'vw';
-        b.style.animationDuration = (Math.random() * 8 + 7) + 's';
-        b.style.animationDelay = Math.random() * 5 + 's';
+        b.style.top = Math.random() * 100 + 'vh';
+        b.style.animationDuration = (Math.random() * 10 + 10) + 's';
+        b.style.animationDelay = (Math.random() * 5) + 's';
         container.appendChild(b);
     }
-})();
+}
+
+initBubbles();
