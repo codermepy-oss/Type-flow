@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TypeMaster | Pro Typing</title>
+    <title>TypeMaster | Glass Edition</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="dark-mode">
@@ -23,10 +23,11 @@
     <main id="dashboard" class="page active">
         <section class="hero-container">
             <div class="glass-card hero-card">
-                <span class="badge">Pro Typing Engine</span>
-                <h1>Master Your Speed</h1>
-                <p>High-precision tracking with real-time accuracy feedback.</p>
-                <button class="btn-primary" onclick="navigateTo('practice')">Start Practice</button>
+                <div class="hero-emoji-top">🚀 ⌨️ 🎯</div>
+                <span class="badge">Next-Gen Typing</span>
+                <h1 class="gradient-text">TypeMaster</h1>
+                <p>Elevate your speed with a frosted glass experience. <br> Master the flow and track your precision in real-time. ✨</p>
+                <button class="btn-primary pulse" onclick="navigateTo('practice')">Start Practice ⚡</button>
             </div>
         </section>
     </main>
@@ -34,26 +35,42 @@
     <main id="practice" class="page">
         <div class="practice-container">
             <div class="stats-grid">
-                <div class="glass-card stat-tile"><span class="label">TIME</span><span id="timer" class="value">0</span></div>
-                <div class="glass-card stat-tile"><span class="label">WPM</span><span id="wpm" class="value">0</span></div>
-                <div class="glass-card stat-tile"><span class="label">ACCURACY</span><span id="accuracy" class="value">100</span><small>%</small></div>
+                <div class="glass-card stat-tile hover-glow">
+                    <span class="tile-icon">⏱️</span>
+                    <span class="label">TIME</span>
+                    <span id="timer" class="value">0</span>
+                </div>
+                <div class="glass-card stat-tile hover-glow">
+                    <span class="tile-icon">🚀</span>
+                    <span class="label">WPM</span>
+                    <span id="wpm" class="value">0</span>
+                </div>
+                <div class="glass-card stat-tile hover-glow">
+                    <span class="tile-icon">🎯</span>
+                    <span class="label">ACCURACY</span>
+                    <span id="accuracy" class="value">100</span><small>%</small>
+                </div>
             </div>
+
             <div class="glass-card main-typing-box">
                 <div id="text-display" class="sentence-display"></div>
                 <div class="input-wrapper">
-                    <input type="text" id="typing-input" placeholder="Type here and press Enter to finish..." autocomplete="off">
+                    <input type="text" id="typing-input" placeholder="Type and hit Enter to finish early..." autocomplete="off">
                 </div>
             </div>
+            
             <button class="btn-ghost" onclick="navigateTo('dashboard')">Exit to Dashboard</button>
         </div>
     </main>
 
     <div id="modal-overlay" class="modal hidden">
         <div class="glass-card modal-box">
-            <h2>🏆 Performance</h2>
+            <h2>🏆 Performance Report</h2>
             <div id="final-results" class="results-content"></div>
-            <button class="btn-primary" onclick="resetTest()">Try Again</button>
-            <button class="btn-primary btn-alt" onclick="navigateTo('dashboard')">Back to Dashboard</button>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="resetTest()">Try Again</button>
+                <button class="btn-primary btn-alt" onclick="navigateTo('dashboard')">Dashboard</button>
+            </div>
         </div>
     </div>
 
