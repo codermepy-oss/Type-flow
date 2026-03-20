@@ -257,3 +257,21 @@ body {
 
 .bubble-container { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
 .bubble { position: absolute; background: var(--accent); opacity: 0.05; border-radius: 50%; }
+.sentence-display {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    color: var(--text-main); /* FIX: Uses the adaptive color variable */
+    opacity: 0.4; /* Base opacity for untyped text */
+    line-height: 1.5;
+}
+
+.sentence-display span.correct {
+    color: var(--accent);
+    opacity: 1;
+}
+
+.sentence-display span.incorrect {
+    color: #ff4757;
+    opacity: 1;
+    background: rgba(255, 71, 87, 0.2);
+}
