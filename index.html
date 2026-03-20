@@ -14,13 +14,13 @@
 
     <nav class="glass-nav">
         <div class="logo">TypeMaster ⚡</div>
-        <button id="theme-toggle" class="glass-button">☀️ Switch Theme</button>
+        <button id="theme-toggle" class="glass-button">☀️ Light Mode</button>
     </nav>
 
     <main id="dashboard" class="page active">
         <div class="glass-card hero-tile">
             <h1>TypeMaster</h1>
-            <p>Challenge your speed!!!.</p>
+            <p>Master your keystrokes with glass-styled precision.</p>
             <div class="emoji-container">
                 <span class="floating-emoji">🚀</span>
                 <span class="floating-emoji">⌨️</span>
@@ -33,15 +33,26 @@
     <main id="practice" class="page">
         <div class="practice-container">
             <div class="stats-bar">
-                <div class="glass-card stat-item">Time: <span id="timer">0</span>s</div>
-                <div class="glass-card stat-item">WPM: <span id="wpm">0</span></div>
-                <div class="glass-card stat-item">Accuracy: <span id="accuracy">100</span>%</div>
+                <div class="glass-card stat-item">
+                    <small>TIME</small>
+                    <span id="timer">0</span>
+                </div>
+                <div class="glass-card stat-item">
+                    <small>WPM</small>
+                    <span id="wpm">0</span>
+                </div>
+                <div class="glass-card stat-item">
+                    <small>ACCURACY</small>
+                    <span id="accuracy">100</span>%
+                </div>
             </div>
+
             <div class="glass-card typing-area">
                 <div id="text-display" class="sentence-display"></div>
-                <input type="text" id="typing-input" placeholder="Type and press Enter..." autocomplete="off">
+                <input type="text" id="typing-input" placeholder="Start typing here..." autocomplete="off">
             </div>
-            <button class="btn-outline" onclick="navigateTo('dashboard')">Exit</button>
+            
+            <button class="btn-outline" onclick="navigateTo('dashboard')">Exit to Dashboard</button>
         </div>
     </main>
 
@@ -52,7 +63,7 @@
             <div id="final-results" class="results-grid"></div>
             <div class="modal-actions">
                 <button class="btn-main" onclick="resetTest()">Try Again</button>
-                <button class="btn-main btn-alt" onclick="navigateTo('dashboard')">Back to Dashboard</button>
+                <button class="btn-main btn-secondary" onclick="navigateTo('dashboard')">Back to Dashboard</button>
             </div>
         </div>
     </div>
