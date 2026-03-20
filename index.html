@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TypeMaster | Speed Test</title>
+    <title>TypeMaster | Glassmorphism Edition</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="dark-mode">
@@ -14,56 +14,59 @@
 
     <nav class="glass-nav">
         <div class="logo">TypeMaster ⚡</div>
-        <button id="theme-toggle" class="glass-button">☀️ Light Mode</button>
+        <button id="theme-toggle" class="theme-btn-styled">☀️ Light Mode</button>
     </nav>
 
     <main id="dashboard" class="page active">
         <div class="glass-card hero-tile">
             <h1>TypeMaster</h1>
-            <p>Master your keystrokes with glass-styled precision.</p>
+            <p>Elevate your speed with a frosted glass experience.</p>
             <div class="emoji-container">
                 <span class="floating-emoji">🚀</span>
                 <span class="floating-emoji">⌨️</span>
-                <span class="floating-emoji">🔥</span>
             </div>
-            <button class="btn-main" onclick="navigateTo('practice')">Start Practicing</button>
+            <button class="btn-primary" onclick="navigateTo('practice')">Start Practice</button>
         </div>
     </main>
 
     <main id="practice" class="page">
         <div class="practice-container">
-            <div class="stats-bar">
-                <div class="glass-card stat-item">
-                    <small>TIME</small>
-                    <span id="timer">0</span>
+            <div class="stats-grid">
+                <div class="glass-card stat-tile">
+                    <span class="label">TIME</span>
+                    <span id="timer" class="value">0</span>
                 </div>
-                <div class="glass-card stat-item">
-                    <small>WPM</small>
-                    <span id="wpm">0</span>
+                <div class="glass-card stat-tile">
+                    <span class="label">WPM</span>
+                    <span id="wpm" class="value">0</span>
                 </div>
-                <div class="glass-card stat-item">
-                    <small>ACCURACY</small>
-                    <span id="accuracy">100</span>%
+                <div class="glass-card stat-tile">
+                    <span class="label">ACCURACY</span>
+                    <span id="accuracy" class="value">100</span><small>%</small>
                 </div>
             </div>
 
-            <div class="glass-card typing-area">
+            <div class="glass-card main-typing-box">
                 <div id="text-display" class="sentence-display"></div>
-                <input type="text" id="typing-input" placeholder="Start typing here..." autocomplete="off">
+                <div class="input-wrapper">
+                    <input type="text" id="typing-input" placeholder="Type the text above..." autocomplete="off">
+                </div>
             </div>
             
-            <button class="btn-outline" onclick="navigateTo('dashboard')">Exit to Dashboard</button>
+            <button class="btn-ghost" onclick="navigateTo('dashboard')">Exit to Dashboard</button>
         </div>
     </main>
 
     <div id="modal-overlay" class="modal hidden">
         <div class="glass-card modal-box">
-            <span class="emoji-lg">🏆</span>
-            <h2>Test Completed!</h2>
-            <div id="final-results" class="results-grid"></div>
-            <div class="modal-actions">
-                <button class="btn-main" onclick="resetTest()">Try Again</button>
-                <button class="btn-main btn-secondary" onclick="navigateTo('dashboard')">Back to Dashboard</button>
+            <div class="modal-header">
+                <span class="emoji-lg">🎊</span>
+                <h2>Results</h2>
+            </div>
+            <div id="final-results" class="results-content"></div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="resetTest()">Try Again</button>
+                <button class="btn-primary btn-alt" onclick="navigateTo('dashboard')">Dashboard</button>
             </div>
         </div>
     </div>
